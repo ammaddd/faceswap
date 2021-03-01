@@ -9,7 +9,7 @@ from threading import Lock
 from time import sleep
 
 import cv2
-
+from comet_ml import Experiment
 from lib.keypress import KBHit
 from lib.multithreading import MultiThread
 from lib.utils import (get_folder, get_image_paths, FaceswapError, _image_extensions)
@@ -35,6 +35,10 @@ class Train():  # pylint:disable=too-few-public-methods
     """
     def __init__(self, arguments):
         logger.debug("Initializing %s: (args: %s", self.__class__.__name__, arguments)
+        self.experiment = Experiment()
+        self.experiment.log_code("./plugins/train/model/_base.py")
+        self.experiment.log_code("./plugins/train/trainer/_base.py")
+        self.experiment.log_others(vars(arguments))
         self._args = arguments
         self._images = self._get_images()
         self._timelapse = self._set_timelapse()
@@ -299,7 +303,7 @@ class Train():  # pylint:disable=too-few-public-methods
             else:
                 viewer = None
             timelapse = self._timelapse if save_iteration else None
-            trainer.train_one_step(viewer, timelapse)
+            trainer.train_one_step(viewer, timelapse, iteration, self.experiment)
             if self._stop:
                 logger.debug("Stop received. Terminating")
                 break
@@ -315,13 +319,13 @@ class Train():  # pylint:disable=too-few-public-methods
 
             if save_iteration:
                 logger.debug("Save Iteration: (iteration: %s", iteration)
-                model.save()
+                model.save(self.experiment)
             elif self._save_now:
                 logger.debug("Save Requested: (iteration: %s", iteration)
-                model.save()
+                model.save(self.experiment)
                 self._save_now = False
         logger.debug("Training cycle complete")
-        model.save()
+        model.save(self.experiment)
         trainer.clear_tensorboard()
         self._stop = True
 

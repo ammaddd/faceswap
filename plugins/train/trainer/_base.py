@@ -200,7 +200,7 @@ class TrainerBase():
         logger.verbose("Enabled TensorBoard Logging")
         return tensorboard
 
-    def train_one_step(self, viewer, timelapse_kwargs):
+    def train_one_step(self, viewer, timelapse_kwargs, iteration, experiment):
         """ Running training on a batch of images for each side.
 
         Triggered from the training cycle in :class:`scripts.train.Train`.
@@ -273,6 +273,8 @@ class TrainerBase():
             raise
         self._log_tensorboard(loss)
         loss = self._collate_and_store_loss(loss[1:])
+        experiment.log_metric("Loss A", loss[0], step=iteration)
+        experiment.log_metric("Loss B", loss[1], step=iteration)
         self._print_loss(loss)
 
         if do_snapshot:
@@ -287,7 +289,7 @@ class TrainerBase():
                        "Training - 'S': Save Now. 'R': Refresh Preview. 'ENTER': Save and Quit")
 
         if do_timelapse:
-            self._timelapse.output_timelapse(timelapse_kwargs)
+            self._timelapse.output_timelapse(timelapse_kwargs, experiment)
 
     def _log_tensorboard(self, loss):
         """ Log current loss to Tensorboard log files
@@ -1040,7 +1042,7 @@ class _Timelapse():  # pylint:disable=too-few-public-methods
         self._feeder.set_timelapse_feed(images, batchsize)
         logger.debug("Set up time-lapse")
 
-    def output_timelapse(self, timelapse_kwargs):
+    def output_timelapse(self, timelapse_kwargs, experiment):
         """ Generate the time-lapse samples and output the created time-lapse to the specified
         output folder.
 
@@ -1065,6 +1067,7 @@ class _Timelapse():  # pylint:disable=too-few-public-methods
         filename = os.path.join(self._output_file, str(int(time.time())) + ".jpg")
 
         cv2.imwrite(filename, image)
+        experiment.log_image(image[:, :, ::-1], name="Images")
         logger.debug("Created time-lapse: '%s'", filename)
 
 
