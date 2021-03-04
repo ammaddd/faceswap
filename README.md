@@ -89,6 +89,13 @@ Check out [USAGE.md](USAGE.md) for more detailed instructions.
 From your setup folder, run `python faceswap.py extract`. This will take photos from `src` folder and extract faces into `extract` folder.
 
 ## Train
+To quickly see the code in action on Trump-Cage dataset, create a <a href="https://www.comet.ml/">Comet API key</a>, and run the following:
+```
+COMET_API_KEY=YOUR-API-KEY python faceswap.py train -A ./data_new/trump -B ./data_new/cage -m ./data/trump_cage_model/ --batch-size 2 --timelapse-input-A ./data_new/trump --timelapse-input-B ./data_new/cage --timelapse-output ./output```
+Demo Project: https://www.comet.ml/comet-papers/faceswap <br /><br />
+<p align="center"><img src="https://user-images.githubusercontent.com/49341767/109948152-de1cd880-7cfb-11eb-9323-6c51ec7e0737.png" height="400px" /><br />
+Timelapse output logged in comet.</p>
+
 From your setup folder, run `python faceswap.py train`. This will take photos from two folders containing pictures of both faces and train a model that will be saved inside the `models` folder.
 
 ## Convert
