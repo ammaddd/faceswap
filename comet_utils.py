@@ -61,13 +61,13 @@ class CometLogger:
         """Log additional source code files.
 
         Args:   
-        file_name: optional, string: the file path of the file to log
-        folder: optional, string: the folder path where the code files
-            are stored
-        code: optional, string: source code, either as a string or a
-            file-like object (like StringIO). If passed, code_name is mandatory
-        code_name: optional, string: name of the source code file when
-            code parameter is passed
+            file_name: optional, string: the file path of the file to log
+            folder: optional, string: the folder path where the code files
+                are stored
+            code: optional, string: source code, either as a string or a
+                file-like object (like StringIO). If passed, code_name is mandatory
+            code_name: optional, string: name of the source code file when
+                code parameter is passed
         """
         self._experiment.log_code(file_name, folder, code, code_name)
 
@@ -151,9 +151,9 @@ class CometLogger:
             a folder path or a file-like object.
 
         Args:         
-        name: string (required), the name of the model
-        file_or_folder: the model data (required); can be a file path,
-            a folder path or a file-like object.
-        file_name: (optional) the name of the model data. Used with.
+            name: string (required), the name of the model
+            file_or_folder: the model data (required); can be a file path,
+                a folder path or a file-like object.
+            file_name: (optional) the name of the model data. Used with.
         """
         self._experiment.log_model(name, file_or_folder, file_name)
