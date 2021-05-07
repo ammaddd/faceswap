@@ -217,6 +217,12 @@ class FaceSwapArgs():
             dest="colab",
             default=False,
             help=argparse.SUPPRESS))
+        global_args.append(dict(
+            opts=("-comet", "--comet"),
+            dest="comet",
+            type=bool,
+            default=False,
+            help=_("Enable comet for logging.")))
         return global_args
 
     @staticmethod

@@ -2,7 +2,7 @@
 """ The master faceswap.py script """
 import gettext
 import sys
-from comet_ml import Experiment
+from comet_utils import CometLogger
 from lib.cli import args as cli_args
 from lib.config import generate_configs
 

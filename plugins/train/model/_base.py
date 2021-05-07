@@ -360,14 +360,14 @@ class ModelBase():
             if isinstance(layer, KModel):
                 layer.summary(print_fn=lambda x: logger.verbose("%s", x))
 
-    def save(self, experiment):
+    def save(self, comet_logger):
         """ Save the model to disk.
 
         Saves the serialized model, with weights, to the folder location specified when
         initializing the plugin. If loss has dropped on both sides of the model, then
         a backup is taken.
         """
-        self._io._save(experiment)  # pylint:disable=protected-access
+        self._io._save(comet_logger)  # pylint:disable=protected-access
 
     def snapshot(self):
         """ Creates a   snapshot of the model folder to the models parent folder, with the number
@@ -529,7 +529,7 @@ class _IO():
         logger.info("Loaded model from disk: '%s'", self._filename)
         return model
 
-    def _save(self, experiment=None):
+    def _save(self, comet_logger=None):
         """ Backup and save the model and state file.
 
         Notes
@@ -549,8 +549,8 @@ class _IO():
 
         self._plugin.model.save(self._filename, include_optimizer=False)
         self._plugin.state.save()
-        if experiment is not None:
-            experiment.log_model("Faceswap", self._filename)
+        if comet_logger is not None:
+            comet_logger.log_model("Faceswap", self._filename)
 
         msg = "[Saved models]"
         if save_averages:
