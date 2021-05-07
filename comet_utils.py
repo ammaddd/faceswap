@@ -88,17 +88,6 @@ class CometLogger:
                                     include_context)
 
     @_requiresComet
-    def log_parameter(self, name, value, step=None):
-        """Logs a single hyperparameter
-
-        Args:
-            name: String - Name of your metric
-            value: Float/Integer/Boolean/String
-            step: Optional. Used as the X axis when plotting on comet.ml
-        """
-        self._experiment.log_parameter(name, value, step)
-
-    @_requiresComet
     def log_image(self, image_data, name=None, overwrite=False,
                   image_format="png", image_scale=1.0, image_shape=None,
                   image_colormap=None, image_minmax=None, image_channels="last",
