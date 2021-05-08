@@ -2,10 +2,9 @@
 """ The master faceswap.py script """
 import gettext
 import sys
-
+from comet_utils import CometLogger
 from lib.cli import args as cli_args
 from lib.config import generate_configs
-
 
 # LOCALES
 _LANG = gettext.translation("faceswap", localedir="locales", fallback=True)
